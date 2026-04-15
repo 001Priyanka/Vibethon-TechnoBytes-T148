@@ -41,13 +41,23 @@ export function FlashcardDeck({ topicId }: { topicId?: string }) {
   }
 
   const handleKnown = () => {
-    setKnownCards(prev => new Set([...prev, currentCard.id]))
-    handleNext()
+    setKnownCards(prev => {
+      const newSet = new Set<string>();
+      prev.forEach(v => newSet.add(v));
+      newSet.add(currentCard.id);
+      return newSet;
+    });
+    handleNext();
   }
 
   const handleReview = () => {
-    setReviewCards(prev => new Set([...prev, currentCard.id]))
-    handleNext()
+    setReviewCards(prev => {
+      const newSet = new Set<string>();
+      prev.forEach(v => newSet.add(v));
+      newSet.add(currentCard.id);
+      return newSet;
+    });
+    handleNext();
   }
 
   const handleShuffle = () => {

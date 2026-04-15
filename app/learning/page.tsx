@@ -1,8 +1,8 @@
 "use client";
 
 import { AvatarMentor } from "@/components/avatar/AvatarMentor";
-import Flashcard from "@/components/flashcards/Flashcard";
-import Quiz from "@/components/quiz/Quiz";
+import { FlashcardDeck } from "@/components/flashcards/Flashcard";
+import { MCQQuiz } from "@/components/quiz/Quiz";
 
 export default function LearningPage() {
   return (
@@ -18,10 +18,7 @@ export default function LearningPage() {
       />
 
       {/* Flashcard */}
-      <Flashcard
-        front="What is regression?"
-        back="It predicts continuous values"
-      />
+      <FlashcardDeck />
 
       {/* Avatar reaction */}
       <AvatarMentor
@@ -30,7 +27,7 @@ export default function LearningPage() {
       />
 
       {/* Quiz */}
-      <Quiz />
+      <MCQQuiz />
 
       {/* Final Avatar */}
       <AvatarMentor

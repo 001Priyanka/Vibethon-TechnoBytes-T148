@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hover?: boolean
@@ -13,19 +12,18 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, hover = true, glow = false, glowColor = '#a855f7', children, ...props }, ref) => {
     return (
-      <motion.div
+      <div
         ref={ref}
-        whileHover={hover ? { scale: 1.02, y: -4 } : {}}
-        transition={{ duration: 0.2 }}
         className={cn(
           'glass-card relative overflow-hidden transition-all duration-300',
+          hover && 'hover:scale-[1.02] hover:-translate-y-1',
           glow && 'hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]',
           className
         )}
         {...props}
       >
         {glow && (
-          <motion.div
+          <div
             className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
             style={{
               background: `radial-gradient(circle at 50% 50%, ${glowColor}20, transparent 70%)`,
@@ -39,7 +37,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
             background: `linear-gradient(135deg, ${glowColor}10, transparent 50%)`,
           }}
         />
-      </motion.div>
+      </div>
     )
   }
 )

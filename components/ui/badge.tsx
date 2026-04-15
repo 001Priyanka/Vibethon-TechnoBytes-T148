@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,10 +27,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     }
 
     return (
-      <motion.div
+      <div
         ref={ref}
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
         className={cn(
           'inline-flex items-center gap-1.5 rounded-full border font-medium transition-colors',
           variants[variant],
@@ -41,35 +38,13 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         {...props}
       >
         {pulse && (
-          <motion.span
-            className="relative flex h-2 w-2"
-            animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          >
-            <span
-              className={cn(
-                'absolute inline-flex h-full w-full rounded-full opacity-75',
-                variant === 'success' && 'bg-green-400',
-                variant === 'warning' && 'bg-yellow-400',
-                variant === 'danger' && 'bg-red-400',
-                variant === 'default' && 'bg-purple-400',
-                variant === 'secondary' && 'bg-blue-400'
-              )}
-            />
-            <span
-              className={cn(
-                'relative inline-flex rounded-full h-2 w-2',
-                variant === 'success' && 'bg-green-500',
-                variant === 'warning' && 'bg-yellow-500',
-                variant === 'danger' && 'bg-red-500',
-                variant === 'default' && 'bg-purple-500',
-                variant === 'secondary' && 'bg-blue-500'
-              )}
-            />
-          </motion.span>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
         )}
         {children}
-      </motion.div>
+      </div>
     )
   }
 )
