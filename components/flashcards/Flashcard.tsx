@@ -6,6 +6,8 @@ import { flashcards as initialFlashcards } from '@/data/mockData'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { XPPopup } from '@/components/effects/XPPopup'
+import { useUpdateXP } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { CheckCircle, RotateCcw, ChevronLeft, ChevronRight, Shuffle } from 'lucide-react'
 
@@ -19,6 +21,8 @@ export function FlashcardDeck({ topicId }: { topicId?: string }) {
   const [direction, setDirection] = useState(0)
   const [knownCards, setKnownCards] = useState<Set<string>>(new Set())
   const [reviewCards, setReviewCards] = useState<Set<string>>(new Set())
+  const [showXP, setShowXP] = useState(false)
+  const updateXP = useUpdateXP()
 
   const currentCard = cards[currentIndex]
 
@@ -47,6 +51,9 @@ export function FlashcardDeck({ topicId }: { topicId?: string }) {
       newSet.add(currentCard.id);
       return newSet;
     });
+    updateXP.mutate(5)
+    setShowXP(true)
+    setTimeout(() => setShowXP(false), 1200)
     handleNext();
   }
 
@@ -172,6 +179,7 @@ export function FlashcardDeck({ topicId }: { topicId?: string }) {
           Shuffle
         </Button>
       </div>
+      <XPPopup amount={5} visible={showXP} />
     </div>
   )
 }

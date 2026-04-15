@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -37,7 +37,7 @@ const tabs = [
   { id: 'chat', label: 'Ask Nova', icon: <MessageCircle className="w-4 h-4" /> },
 ]
 
-export default function TopicPage() {
+function TopicPageContent() {
   const searchParams = useSearchParams()
   const topicId = searchParams.get('id') || 'linear-algebra'
   const [activeTab, setActiveTab] = useState('learn')
@@ -257,5 +257,13 @@ print(f"Result: {result}")
         </TabPanel>
       </main>
     </div>
+  )
+}
+
+export default function TopicPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+      <TopicPageContent />
+    </Suspense>
   )
 }

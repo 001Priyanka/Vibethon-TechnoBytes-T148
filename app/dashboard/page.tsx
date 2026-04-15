@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
 import { 
   XPProgressBar, 
   StreakCounter, 
@@ -19,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabPanel } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { useStore } from '@/store/useStore'
 import { 
   Home, 
   BookOpen, 
@@ -32,17 +36,47 @@ import {
   Zap
 } from 'lucide-react'
 
+interface UserData {
+  id: string
+  name: string
+  email: string
+  xp: number
+  level: number
+}
+
 const navItems = [
   { icon: Home, label: 'Dashboard', href: '/dashboard', active: true },
-  { icon: BookOpen, label: 'Learning', href: '/dashboard' },
-  { icon: Code, label: 'Labs', href: '/dashboard' },
-  { icon: MessageCircle, label: 'Chat', href: '/dashboard' },
+  { icon: BookOpen, label: 'Learning', href: '/learning' },
+  { icon: Code, label: 'Labs', href: '/topic?id=linear-algebra&tab=lab' },
+  { icon: MessageCircle, label: 'Chat', href: '/topic?id=linear-algebra&tab=chat' },
   { icon: Trophy, label: 'Achievements', href: '/dashboard' },
 ]
 
 export default function DashboardPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState('overview')
   const [showWelcome, setShowWelcome] = useState(true)
+  const storeUser = useStore.getState().user
+
+  const { data: user } = useQuery<UserData>({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await fetch('/api/user')
+      if (!res.ok) throw new Error('Failed to fetch user')
+      return res.json()
+    },
+    enabled: !!session,
+    retry: false,
+  })
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/')
+    }
+  }, [status, router])
+
+  const userName = user?.name ?? storeUser.name
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -97,7 +131,7 @@ export default function DashboardPage() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600/30 to-blue-600/30 border border-purple-500/30"
               >
                 <Zap className="w-4 h-4 text-yellow-400" />
-                <span className="text-sm font-medium text-white">Level 12</span>
+                <span className="text-sm font-medium text-white">Level {user?.level ?? storeUser.level}</span>
               </motion.div>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="w-5 h-5" />
@@ -115,7 +149,7 @@ export default function DashboardPage() {
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-20 left-1/2 -translate-x-1/2 z-40 glass-card px-6 py-3 flex items-center gap-4"
           >
-            <AvatarMentor message="Welcome back, Alex! Ready to learn something new?" mood="happy" size="sm" />
+            <AvatarMentor message={`Welcome back, ${userName}! Ready to learn something new?`} mood="happy" size="sm" />
             <Button variant="ghost" size="sm" onClick={() => setShowWelcome(false)}>
               Dismiss
             </Button>

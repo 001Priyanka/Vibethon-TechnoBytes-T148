@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { XPPopup } from '@/components/effects/XPPopup'
+import { useUpdateXP } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { CheckCircle, XCircle, Lightbulb, Trophy, ChevronRight } from 'lucide-react'
 
@@ -26,6 +28,8 @@ export function MCQQuiz({ topicId, onComplete }: QuizProps) {
   const [score, setScore] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const [answers, setAnswers] = useState<{ questionId: string; correct: boolean }[]>([])
+  const [showXP, setShowXP] = useState(false)
+  const updateXP = useUpdateXP()
 
   const currentQuestion = questions[currentIndex]
   const isCorrect = selectedAnswer === currentQuestion.correctAnswer
@@ -40,6 +44,9 @@ export function MCQQuiz({ topicId, onComplete }: QuizProps) {
     
     if (correct) {
       setScore(prev => prev + 1)
+      updateXP.mutate(10)
+      setShowXP(true)
+      setTimeout(() => setShowXP(false), 1200)
     }
   }
 
@@ -231,6 +238,7 @@ export function MCQQuiz({ topicId, onComplete }: QuizProps) {
           )}
         </AnimatePresence>
       </motion.div>
+      <XPPopup amount={10} visible={showXP} />
     </div>
   )
 }
