@@ -212,3 +212,11 @@ export function WeakAreasCard() {
     </motion.div>
   )
 }
+export function DailyChallenge() {
+  return (
+    <div className="glass-card p-4">
+      <h3 className="text-white font-bold">Daily Challenge</h3>
+      <p className="text-gray-400 text-sm">Complete 1 topic to earn XP</p>
+    </div>
+  );
+}

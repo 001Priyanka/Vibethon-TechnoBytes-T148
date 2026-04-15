@@ -12,7 +12,9 @@ import {
   DailyChallenge 
 } from '@/components/dashboard/DashboardStats'
 import { LearningPath } from '@/components/learning/LearningPath'
-import { AvatarMentor } from '@/components/avatar/AvatarMentor'
+import { AvatarMentor } from "../../components/avatar/AvatarMentor";
+import { FlashcardDeck } from "@/components/flashcards/Flashcard";
+import {MCQQuiz} from "@/components/quiz/Quiz";
 import { Button } from '@/components/ui/button'
 import { Tabs, TabPanel } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
